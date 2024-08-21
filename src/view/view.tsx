@@ -1,9 +1,17 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import * as Markup from "./view.styles";
-import { store, CofeeParam } from "../store";
+import { store } from "../store";
 
 export const View = observer(() => {
+  const handleSetSugar = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    store.setSugar(ev.target.value);
+  };
+
+  const handleSetVolume = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    store.setVolume(ev.target.value);
+  };
+
   return (
     <>
       {!store.preparationMethod ? (
@@ -24,60 +32,37 @@ export const View = observer(() => {
       <hr />
 
       <div>
-        {store.state === CofeeParam.Sugar ? (
+        {!store.cookingState && !!store.preparationMethod && (
           <div>
             <div>Введите колическтво сахара ?</div>
             <div>
               <input
                 type="number"
                 value={Number(store.shugar)}
-                onChange={(ev) => store.onChangeSugar(ev.target.value)}
+                onChange={handleSetSugar}
               />
             </div>
-            <div>
-              <button
-                onClick={store.onConfirmShugar}
-                disabled={!store.shugar}
-              >
-                Хорош
-              </button>
-            </div>
-          </div>
-        ) : store.state === CofeeParam.Size ? (
-          <div>
+
             <div>Введите объем</div>
+
             <div>
               <input
                 type="number"
                 value={Number(store.volume)}
-                onChange={(ev) => store.onChangeVolume(ev.target.value)}
+                onChange={handleSetVolume}
               />
             </div>
+
             <div>
               <button
-                onClick={store.onConfirmVolume}
-                disabled={!store.volume}
+                disabled={!store.isReadyCooking}
+                onClick={store.onCookingStart}
               >
-                Хорош
+                Приготовить
               </button>
             </div>
           </div>
-        ) : null}
-
-        {!!store.volume &&
-          !!store.shugar &&
-          !store.state &&
-          !store.cookingState && (
-            <div>
-              <div>Сахара - {store.shugar}</div>
-              <div>Объем - {store.volume}</div>
-              <div>Вы уверены ?</div>
-              <div>
-                <button onClick={store.onConfirmStart}>Да</button>
-                <button onClick={store.onConfirmReset}>Нет</button>
-              </div>
-            </div>
-          )}
+        )}
 
         {store.cookingState && <div>{store.cookingState}</div>}
       </div>

@@ -5,8 +5,3 @@ export enum PreparationMethod {
   Latte = "Latte",
 }
 
-
-export enum CofeeParam {
-  Sugar = "Sugar",
-  Size = "Size",
-}
