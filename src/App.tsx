@@ -1,12 +1,16 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { GlobalStyle } from "./app.global-styles";
+import { View } from "./view";
+import * as Markup from "./app.styles";
 
 function App() {
   return (
-    <div className="App">
-      <div>sddsdfsdfsdf</div>
-    </div>
+    <>
+      <div className="App">
+        <GlobalStyle />
+        <View />
+      </div>
+    </>
   );
 }
 
