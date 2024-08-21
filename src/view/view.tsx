@@ -1,62 +1,62 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import * as Markup from "./view.styles";
-import { machine, CofeeParam } from "../state";
+import { store, CofeeParam } from "../store";
 
 export const View = observer(() => {
   return (
     <>
-      {!machine.preparationMethod ? (
+      {!store.preparationMethod ? (
         <div>
           <div>Выберите способ приготовления</div>
           <Markup.Menu>
-            {machine.preparationMethods.map((method) => (
-              <button onClick={() => machine.onSelectPreparationMethod(method)}>
+            {store.preparationMethods.map((method) => (
+              <button onClick={() => store.onSelectPreparationMethod(method)}>
                 {method}
               </button>
             ))}
           </Markup.Menu>
         </div>
       ) : (
-        <div>Выбран - {machine.preparationMethod}</div>
+        <div>Выбран - {store.preparationMethod}</div>
       )}
 
       <hr />
 
       <div>
-        {machine.state === CofeeParam.Sugar ? (
+        {store.state === CofeeParam.Sugar ? (
           <div>
             <div>Сколько сахара ?</div>
             <div>
               <input
                 type="number"
-                value={Number(machine.shugar)}
-                onChange={(ev) => machine.onChangeSugar(ev.target.value)}
+                value={Number(store.shugar)}
+                onChange={(ev) => store.onChangeSugar(ev.target.value)}
               />
             </div>
             <div>
               <button
-                onClick={machine.onConfirmShugar}
-                disabled={!machine.shugar}
+                onClick={store.onConfirmShugar}
+                disabled={!store.shugar}
               >
                 Хорош
               </button>
             </div>
           </div>
-        ) : machine.state === CofeeParam.Size ? (
+        ) : store.state === CofeeParam.Size ? (
           <div>
             <div>Сколько в граммах ?</div>
             <div>
               <input
                 type="number"
-                value={Number(machine.volume)}
-                onChange={(ev) => machine.onChangeVolume(ev.target.value)}
+                value={Number(store.volume)}
+                onChange={(ev) => store.onChangeVolume(ev.target.value)}
               />
             </div>
             <div>
               <button
-                onClick={machine.onConfirmVolume}
-                disabled={!machine.volume}
+                onClick={store.onConfirmVolume}
+                disabled={!store.volume}
               >
                 Хорош
               </button>
@@ -64,27 +64,27 @@ export const View = observer(() => {
           </div>
         ) : null}
 
-        {!!machine.volume &&
-          !!machine.shugar &&
-          !machine.state &&
-          !machine.cookingState && (
+        {!!store.volume &&
+          !!store.shugar &&
+          !store.state &&
+          !store.cookingState && (
             <div>
-              <div>Сахара - {machine.shugar}</div>
-              <div>Объем - {machine.volume}</div>
+              <div>Сахара - {store.shugar}</div>
+              <div>Объем - {store.volume}</div>
               <div>Вы уверены ?</div>
               <div>
-                <button onClick={machine.onConfirmStart}>Да</button>
-                <button onClick={machine.onConfirmReset}>Нет</button>
+                <button onClick={store.onConfirmStart}>Да</button>
+                <button onClick={store.onConfirmReset}>Нет</button>
               </div>
             </div>
           )}
 
-        {machine.cookingState && <div>{machine.cookingState}</div>}
+        {store.cookingState && <div>{store.cookingState}</div>}
       </div>
 
       <hr />
 
-      <button onClick={machine.reset}>Отмена</button>
+      <button onClick={store.reset}>Отмена</button>
     </>
   );
 });

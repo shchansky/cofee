@@ -4,7 +4,7 @@ import { Builder } from "./builder";
 
 import { PreparationMethod, CofeeParam } from "./enums";
 
-class Machine {
+class Store {
   private _preparationMethod: PreparationMethod | null = null;
 
   private _state = new Builder();
@@ -16,6 +16,10 @@ class Machine {
   private _volume: null | number = null;
 
   private _cookingTimer: NodeJS.Timeout | null = null;
+
+  constructor() {
+    makeAutoObservable(this);
+  }
 
   public get cookingState() {
     return this._cookingState;
@@ -37,10 +41,6 @@ class Machine {
     if (!this._preparationMethod) return null;
 
     return PreparationMethod[this._preparationMethod];
-  }
-
-  constructor() {
-    makeAutoObservable(this);
   }
 
   public get state() {
@@ -99,4 +99,4 @@ class Machine {
   };
 }
 
-export const machine = new Machine();
+export const store = new Store();
