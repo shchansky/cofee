@@ -18,7 +18,7 @@ class Store {
   private _cookingTimer: NodeJS.Timeout | null = null;
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   public get cookingState() {
@@ -47,42 +47,42 @@ class Store {
     return this._state.state;
   }
 
-  public onSelectPreparationMethod = (sort: string) => {
+  public onSelectPreparationMethod(sort: string) {
     this._preparationMethod = sort as PreparationMethod;
 
     this._state.addParam(CofeeParam.Sugar);
-  };
+  }
 
-  public onChangeSugar = (count: string) => {
+  public onChangeSugar(count: string) {
     this._shugar = Number(count);
-  };
+  }
 
-  public onConfirmShugar = () => {
+  public onConfirmShugar() {
     this._state.addParam(CofeeParam.Size);
-  };
+  }
 
-  public onChangeVolume = (count: string) => {
+  public onChangeVolume(count: string) {
     this._volume = Number(count);
-  };
+  }
 
-  public onConfirmVolume = () => {
+  public onConfirmVolume() {
     this._state.clear();
-  };
+  }
 
-  public onConfirmStart = () => {
+  public onConfirmStart() {
     this._cookingState = "Кофе готовится....";
     this._cookingTimer = global.setTimeout(() => {
       this._cookingState = "Кофе готов !!!!!";
     }, 2000);
-  };
+  }
 
-  public onConfirmReset = () => {
+  public onConfirmReset() {
     this._shugar = null;
     this._volume = null;
     this._state.addParam(CofeeParam.Sugar);
-  };
+  }
 
-  public reset = () => {
+  public reset() {
     this._preparationMethod = null;
     this._state.clear();
 
@@ -96,7 +96,7 @@ class Store {
         clearTimeout(this._cookingTimer);
       }
     });
-  };
+  }
 }
 
 export const store = new Store();
