@@ -26,7 +26,7 @@ export const View = observer(() => {
       <div>
         {store.state === CofeeParam.Sugar ? (
           <div>
-            <div>Сколько сахара ?</div>
+            <div>Введите колическтво сахара ?</div>
             <div>
               <input
                 type="number"
@@ -45,7 +45,7 @@ export const View = observer(() => {
           </div>
         ) : store.state === CofeeParam.Size ? (
           <div>
-            <div>Сколько в граммах ?</div>
+            <div>Введите объем</div>
             <div>
               <input
                 type="number"

@@ -20,13 +20,9 @@ export class Builder {
 
   public addParam = (param: CofeeParam) => {
     this._state = param;
-
-    return this;
   };
 
   public clear = () => {
     this._state = null;
-
-    return this;
   };
 }
