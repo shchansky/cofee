@@ -2,33 +2,27 @@ import { makeAutoObservable, runInAction } from "mobx";
 
 import { Builder } from "./builder";
 
-import { CofeeSort, CofeeParam } from "./enums";
+import { PreparationMethod, CofeeParam } from "./enums";
 
 class Machine {
-  private _selectedSort: CofeeSort | null = null;
+  private _preparationMethod: PreparationMethod | null = null;
 
   private _state = new Builder();
 
-  private _cookStart = false;
-
-  private _cookFinish = false;
+  private _cookingState: string | null = null;
 
   private _shugar: null | number = null;
 
   private _volume: null | number = null;
 
-  private _timer: NodeJS.Timeout | null = null;
+  private _cookingTimer: NodeJS.Timeout | null = null;
 
-  public get cookStart() {
-    return this._cookStart;
+  public get cookingState() {
+    return this._cookingState;
   }
 
-  public get cookFinish() {
-    return this._cookFinish;
-  }
-
-  public get sort() {
-    return Object.entries(CofeeSort);
+  public get preparationMethods() {
+    return Object.values(PreparationMethod);
   }
 
   public get shugar() {
@@ -39,10 +33,10 @@ class Machine {
     return this._volume;
   }
 
-  public get selectedSort(): null | CofeeSort {
-    if (!this._selectedSort) return null;
+  public get preparationMethod(): null | PreparationMethod {
+    if (!this._preparationMethod) return null;
 
-    return CofeeSort[this._selectedSort];
+    return PreparationMethod[this._preparationMethod];
   }
 
   constructor() {
@@ -53,63 +47,53 @@ class Machine {
     return this._state.state;
   }
 
-  public onSelectSort = (sort: string) => {
-    this._selectedSort = sort as CofeeSort;
+  public onSelectPreparationMethod = (sort: string) => {
+    this._preparationMethod = sort as PreparationMethod;
 
     this._state.addParam(CofeeParam.Sugar);
   };
 
-  ///////////////////////////
   public onChangeSugar = (count: string) => {
     this._shugar = Number(count);
   };
 
-  public onSelectShugar = () => {
+  public onConfirmShugar = () => {
     this._state.addParam(CofeeParam.Size);
   };
-  ///////////////////////////
 
-  ///////////////////////////
   public onChangeVolume = (count: string) => {
     this._volume = Number(count);
   };
 
-  public onSelectVolume = () => {
+  public onConfirmVolume = () => {
     this._state.clear();
   };
-  ///////////////////////////
 
-  //////////////
-
-  public onCookStart = () => {
-    this._cookStart = true;
-    this._timer = global.setTimeout(() => {
-      this._cookStart = false;
-      this._cookFinish = true;
+  public onConfirmStart = () => {
+    this._cookingState = "Кофе готовится....";
+    this._cookingTimer = global.setTimeout(() => {
+      this._cookingState = "Кофе готов !!!!!";
     }, 2000);
   };
 
-  public onCookReset = () => {
+  public onConfirmReset = () => {
     this._shugar = null;
     this._volume = null;
     this._state.addParam(CofeeParam.Sugar);
   };
 
-  /////////////////
-
   public reset = () => {
-    this._selectedSort = null;
+    this._preparationMethod = null;
     this._state.clear();
 
     runInAction(() => {
-      this._cookFinish = false;
-      this._cookStart = false;
+      this._cookingState = null;
 
       this._shugar = null;
       this._volume = null;
 
-      if (!!this._timer) {
-        clearTimeout(this._timer);
+      if (!!this._cookingTimer) {
+        clearTimeout(this._cookingTimer);
       }
     });
   };

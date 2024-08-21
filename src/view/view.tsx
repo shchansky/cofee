@@ -4,20 +4,21 @@ import * as Markup from "./view.styles";
 import { machine, CofeeParam } from "../state";
 
 export const View = observer(() => {
-  console.log(machine.state);
-
   return (
     <>
-      {!machine.selectedSort ? (
-        <Markup.Menu>
-          {machine.sort.map((sort) => (
-            <button onClick={() => machine.onSelectSort(sort[0])}>
-              {sort[1]}
-            </button>
-          ))}
-        </Markup.Menu>
+      {!machine.preparationMethod ? (
+        <div>
+          <div>Выберите способ приготовления</div>
+          <Markup.Menu>
+            {machine.preparationMethods.map((method) => (
+              <button onClick={() => machine.onSelectPreparationMethod(method)}>
+                {method}
+              </button>
+            ))}
+          </Markup.Menu>
+        </div>
       ) : (
-        <div>Выбрано - {machine.selectedSort}</div>
+        <div>Выбран - {machine.preparationMethod}</div>
       )}
 
       <hr />
@@ -35,7 +36,7 @@ export const View = observer(() => {
             </div>
             <div>
               <button
-                onClick={machine.onSelectShugar}
+                onClick={machine.onConfirmShugar}
                 disabled={!machine.shugar}
               >
                 Хорош
@@ -54,7 +55,7 @@ export const View = observer(() => {
             </div>
             <div>
               <button
-                onClick={machine.onSelectVolume}
+                onClick={machine.onConfirmVolume}
                 disabled={!machine.volume}
               >
                 Хорош
@@ -66,21 +67,19 @@ export const View = observer(() => {
         {!!machine.volume &&
           !!machine.shugar &&
           !machine.state &&
-          !machine.cookFinish &&
-          !machine.cookStart && (
+          !machine.cookingState && (
             <div>
               <div>Сахара - {machine.shugar}</div>
               <div>Объем - {machine.volume}</div>
               <div>Вы уверены ?</div>
               <div>
-                <button onClick={machine.onCookStart}>Да</button>
-                <button onClick={machine.onCookReset}>Нет</button>
+                <button onClick={machine.onConfirmStart}>Да</button>
+                <button onClick={machine.onConfirmReset}>Нет</button>
               </div>
             </div>
           )}
 
-        {machine.cookStart && <div>Кофе готовиться....</div>}
-        {machine.cookFinish && <div>Кофе ГОТОВ!!!!</div>}
+        {machine.cookingState && <div>{machine.cookingState}</div>}
       </div>
 
       <hr />
