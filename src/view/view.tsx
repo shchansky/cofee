@@ -63,17 +63,24 @@ export const View = observer(() => {
           </div>
         ) : null}
 
-        {!!machine.volume && !!machine.shugar && !machine.state && (
-          <div>
-            <div>Сахара - {machine.shugar}</div>
-            <div>Объем - {machine.volume}</div>
-            <div>Вы уверены ?</div>
+        {!!machine.volume &&
+          !!machine.shugar &&
+          !machine.state &&
+          !machine.cookFinish &&
+          !machine.cookStart && (
             <div>
-              <button>Да</button>
-              <button onClick={machine.onCookReset}>Нет</button>
+              <div>Сахара - {machine.shugar}</div>
+              <div>Объем - {machine.volume}</div>
+              <div>Вы уверены ?</div>
+              <div>
+                <button onClick={machine.onCookStart}>Да</button>
+                <button onClick={machine.onCookReset}>Нет</button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+        {machine.cookStart && <div>Кофе готовиться....</div>}
+        {machine.cookFinish && <div>Кофе ГОТОВ!!!!</div>}
       </div>
 
       <hr />

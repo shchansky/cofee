@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 
 import { Builder } from "./builder";
 
@@ -9,9 +9,23 @@ class Machine {
 
   private _state = new Builder();
 
+  private _cookStart = false;
+
+  private _cookFinish = false;
+
   private _shugar: null | number = null;
 
   private _volume: null | number = null;
+
+  private _timer: NodeJS.Timeout | null = null;
+
+  public get cookStart() {
+    return this._cookStart;
+  }
+
+  public get cookFinish() {
+    return this._cookFinish;
+  }
 
   public get sort() {
     return Object.entries(CofeeSort);
@@ -67,12 +81,18 @@ class Machine {
 
   //////////////
 
-  public onCookStart = () => {};
+  public onCookStart = () => {
+    this._cookStart = true;
+    this._timer = global.setTimeout(() => {
+      this._cookStart = false;
+      this._cookFinish = true;
+    }, 2000);
+  };
 
   public onCookReset = () => {
     this._shugar = null;
     this._volume = null;
-    this._state.addParam(CofeeParam.Sugar)
+    this._state.addParam(CofeeParam.Sugar);
   };
 
   /////////////////
@@ -80,6 +100,18 @@ class Machine {
   public reset = () => {
     this._selectedSort = null;
     this._state.clear();
+
+    runInAction(() => {
+      this._cookFinish = false;
+      this._cookStart = false;
+
+      this._shugar = null;
+      this._volume = null;
+
+      if (!!this._timer) {
+        clearTimeout(this._timer);
+      }
+    });
   };
 }
 
