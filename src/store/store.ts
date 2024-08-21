@@ -34,13 +34,11 @@ class Store {
   }
 
   public get preparationMethod(): null | PreparationMethod {
-    if (!this._preparationMethod) return null;
-
-    return PreparationMethod[this._preparationMethod];
+    return this._preparationMethod;
   }
 
-  public onSelectPreparationMethod(sort: string) {
-    this._preparationMethod = sort as PreparationMethod;
+  public onSelectPreparationMethod(method: string) {
+    this._preparationMethod = method as PreparationMethod;
   }
 
   public setSugar(count: string) {
