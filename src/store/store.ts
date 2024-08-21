@@ -4,13 +4,9 @@ import { PreparationMethod } from "./enums";
 
 class Store {
   private _preparationMethod: PreparationMethod | null = null;
-
   private _cookingState: string | null = null;
-
   private _shugar: null | number = null;
-
   private _volume: null | number = null;
-
   private _cookingTimer: NodeJS.Timeout | null = null;
 
   constructor() {
